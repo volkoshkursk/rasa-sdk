@@ -2,14 +2,15 @@ import importlib
 import inspect
 import logging
 import pkgutil
+import sys
 import warnings
-from typing import Text, List, Dict, Any, Type, Union, Callable, Optional
-import typing
-import types
 
-from rasa_sdk.interfaces import Tracker, ActionNotFoundException
+import types
+import typing
+from typing import Text, List, Dict, Any, Type, Union, Callable, Optional
 
 from rasa_sdk import utils
+from rasa_sdk.interfaces import Tracker, ActionNotFoundException
 
 if typing.TYPE_CHECKING:
     from rasa_sdk.interfaces import Action
@@ -21,7 +22,6 @@ class CollectingDispatcher:
     """Send messages back to user"""
 
     def __init__(self) -> None:
-
         self.messages = []
 
     def utter_message(
