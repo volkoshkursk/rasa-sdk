@@ -89,7 +89,33 @@ class Tracker:
         else:
             logger.info(f"Tried to access non existent slot '{key}'")
             return None
+    
+    def get_latest_entity_unities(
+        self,
+        entity_type: Text,
+        entity_role: Optional[Text] = None,
+        entity_group: Optional[Text] = None,
+    ) -> Iterator[Text]:
+        """Get entity unities found for the passed entity type and optional role and
+        group in latest message.
+        
+        Args:
+            entity_type: the entity type of interest
+            entity_role: optional entity role of interest
+            entity_group: optional entity group of interest
 
+        Returns:
+            List of entity values.
+        """
+        entities = self.latest_message.get("entities", [])
+        return (
+            (x.get("unity"))
+            for x in entities
+            if x.get("entity") == entity_type
+            and (entity_group is None or x.get("group") == entity_group)
+            and (entity_role is None or x.get("role") == entity_role)
+        )
+    
     def get_latest_entity_values(
         self,
         entity_type: Text,
