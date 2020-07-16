@@ -90,6 +90,16 @@ class Tracker:
             logger.info(f"Tried to access non existent slot '{key}'")
             return None
     
+    def _dict_get(self, element, field_outter, field_inner):
+        """
+        Get element from dictionary, stored in another dictionary
+        """
+        element = element.get(field_outter)
+        if isinstance(element, dict):
+            return element.get(field_inner)
+        else:
+            return None
+    
     def get_latest_entity_unities(
         self,
         entity_type: Text,
@@ -140,7 +150,7 @@ class Tracker:
 
         entities = self.latest_message.get("entities", [])
         return (
-            x.get("value")
+            (x.get("value"), self._dict_get(x, "additional_info", "unit"))
             for x in entities
             if x.get("entity") == entity_type
             and (entity_group is None or x.get("group") == entity_group)
